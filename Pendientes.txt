@@ -1,0 +1,4 @@
+1 Agregar botón de borrar
+2 Agregar raices y potencias
+3 Agregar numeros como pi
+4 Arreglar los estilos (grid)
