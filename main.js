@@ -53,7 +53,6 @@ botones.addEventListener("click", (e)=>{
             break
         case "op":
             const type = e.target.dataset.type
-            console.log(addOp);
             
             if(addOp){
                 point.classList = "buttons"
@@ -66,25 +65,10 @@ botones.addEventListener("click", (e)=>{
             break
         case "equ":
             addNumberToArray(numTemp)
-            count = 0
-            total = Number(numbers[count])
-            for (op in operat){
-                count ++              
-                switch(operat[op]){
-                    case "sum":
-                        total = total + Number(numbers[count])                                         
-                        break
-                    case "sub":
-                        total = total - Number(numbers[count])
-                        break
-                    case "pro":
-                        // total = total * Number(numbers[count])
-                        break
-                    case "div":
-                        // total = total / Number(numbers[count])
-                        break
-                }
-            }
+            numbers.forEach(element => {
+                console.log(element)
+            });            
+            total = operateListNumbers(numbers, operat)
             text = total  
             screen.textContent = text                    
             break
@@ -114,40 +98,60 @@ function checkEmpyList(){
     }
 }
 function addNumberToArray(num){
-    numbers.push(num)
+    numbers.push(Number(num))
     numTemp = ""
     contador = 0
 }
 function addOperationToArray(op){
 
 }
-// function StringToOperation(text){
-//     let numbers = []
-//     let probNum
-//     for (char in text){
+// Función para operar la lista de números
+function operateListNumbers(num, operat){
+    let isFinish = true
+    let provNumber 
+    for( i in operat){
+        // Product and división
+        if(operat[i] === "pro" || operat[i] === "div"){
+            switch (operat[i]){
+                case "pro":
+                    provNumber = num[i] * num[Number(i)+1]
+                    break
+                case "div":
+                    if(num[Number(i)+1] == 0){
+                        return "ERROR"
+                    }else{
+                        provNumber = num[i] / num[Number(i)+1]
+                    }
+                    break
+            }
+            delete operat[i]
+            num[Number(i)+1] = provNumber
+            delete num[i]
+            operat = operat.filter(item => item !== undefined)
+            num = num.filter(item => item !== undefined)
+            isFinish = false
+            break
+        }
+    }
+    if(isFinish){        
+        const newNumbers = num.filter(item => item !== undefined)
+        const newOperat = operat.filter(item => item !== undefined)
+        let total = num[0]
         
-//     }
-// }
-
-// Operaciones
-
-// Suma
-// function sumNumber(num1, num2){
-//     return num1 + num2
-// }
-// // Resta
-// function subNumber(num1, num2){
-//     return num1 - num2
-// }
-// // Multiplicación
-// function mulNumber(num1, num2){
-//     return num1 * num2
-// }
-// // División
-// function divNumber(num1, num2){
-//     if (num2 === 0){
-//         return "Error"
-//     }else{
-//         return num1 / num2
-//     }
-// }
+        for(let i = 0; i < newOperat.length; i++){
+            switch(newOperat[i]){
+                case "sum":
+                    total += newNumbers[i+1]                                         
+                    break
+                case "sub":
+                    total -= newNumbers[i+1]
+                    break
+            }
+        }
+        console.log(total);
+        
+        return total
+    }else{
+        return (operateListNumbers(num, operat))
+    }
+}
