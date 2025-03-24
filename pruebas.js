@@ -1,5 +1,5 @@
-const operations = ["sum", "pro", "sum", "div", "pro"]
-const numbers = [2, 7, 12, 2, 4, 10]
+const operations = ["pro", "sum"]
+const numbers = [9, 9, 2]
 
 function operateListNumbers(num, operat){
     let isFinish = true
@@ -10,6 +10,7 @@ function operateListNumbers(num, operat){
             switch (operat[i]){
                 case "pro":
                     provNumber = num[i] * num[Number(i)+1]
+                    console.log(provNumber)                    
                     break
                 case "div":
                     if(num[Number(i)+1] == 0){
@@ -20,8 +21,10 @@ function operateListNumbers(num, operat){
                     break
             }
             delete operat[i]
-            num[Number(i)+1] = provNumber
+            num[Number(i)+1] = provNumber            
             delete num[i]
+            operat = operat.filter(item => item !== undefined)
+            num = num.filter(item => item !== undefined)
             isFinish = false
             break
         }
